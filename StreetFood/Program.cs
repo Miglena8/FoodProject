@@ -1,3 +1,4 @@
+using ASPShopBag.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using StreetFood.Data;
@@ -36,6 +37,7 @@ namespace StreetFood
                 app.UseHsts();
             }
 
+            app.PrepareDataBase().Wait();// !!! my service
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
