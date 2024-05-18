@@ -11,56 +11,60 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            Ястие:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Weight)
+           Тегло
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Weight)
+            @Html.DisplayFor(model => model.Weight) грама
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DietFood)
+            Диетично ли е ястието:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.DietFood)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FoodCategories)
+            Категория:
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FoodCategories.Id)
+            @Html.DisplayFor(model => model.FoodCategories.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ingredients)
+            Съставки
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Ingredients)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Image)
+            Снимка:
         </dt>
         <dd class = "col-sm-10">
 			<img src="@Html.DisplayFor(model => model.Image)" width="200"/>
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
+            Цена:
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
+            @Html.DisplayFor(model => model.Price) лв.
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateUpdate)
+            Дата на добавяне:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.DateUpdate)
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+@if (User.IsInRole("Admin"))
+{
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>
+}
+

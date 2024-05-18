@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,13 +11,16 @@ using StreetFood.Data;
 
 namespace StreetFood.Controllers
 {
+    [Authorize]
     public class OrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<Client> _userManager;
 
-        public OrdersController(ApplicationDbContext context)
+        public OrdersController(ApplicationDbContext context, UserManager<Client> userManager)
         {
             _context = context;
+            _userManager = userManager; 
         }
 
         // GET: Orders
@@ -48,8 +53,8 @@ namespace StreetFood.Controllers
         // GET: Orders/Create
         public IActionResult Create()
         {
-            ViewData["ClientsId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["FoodId"] = new SelectList(_context.Foods, "Id", "Id");
+            //ViewData["ClientsId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["FoodId"] = new SelectList(_context.Foods, "Id", "Name");
             return View();
         }
 
@@ -58,16 +63,18 @@ namespace StreetFood.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ClientsId,FoodId,Quantity,DateUpdate")] Order order)
+        public async Task<IActionResult> Create([Bind("FoodId,Quantity,DateUpdate")] Order order)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(order);
+                order.DateUpdate = DateTime.Now;
+                order.ClientsId = _userManager.GetUserId(User);
+                _context.Orders.Add(order);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientsId"] = new SelectList(_context.Users, "Id", "Id", order.ClientsId);
-            ViewData["FoodId"] = new SelectList(_context.Foods, "Id", "Id", order.FoodId);
+            //ViewData["ClientsId"] = new SelectList(_context.Users, "Id", "Id", order.ClientsId);
+            ViewData["FoodId"] = new SelectList(_context.Foods, "Id", "Name", order.FoodId);
             return View(order);
         }
 
@@ -84,8 +91,8 @@ namespace StreetFood.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClientsId"] = new SelectList(_context.Users, "Id", "Id", order.ClientsId);
-            ViewData["FoodId"] = new SelectList(_context.Foods, "Id", "Id", order.FoodId);
+            //ViewData["ClientsId"] = new SelectList(_context.Users, "Id", "Id", order.ClientsId);
+            ViewData["FoodId"] = new SelectList(_context.Foods, "Id", "Name", order.FoodId);
             return View(order);
         }
 
@@ -94,7 +101,7 @@ namespace StreetFood.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ClientsId,FoodId,Quantity,DateUpdate")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FoodId,Quantity,DateUpdate")] Order order)
         {
             if (id != order.Id)
             {
@@ -105,7 +112,9 @@ namespace StreetFood.Controllers
             {
                 try
                 {
-                    _context.Update(order);
+                    order.DateUpdate = DateTime.Now;
+                    order.ClientsId = _userManager.GetUserId(User);
+                    _context.Orders.Update(order);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -121,8 +130,8 @@ namespace StreetFood.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientsId"] = new SelectList(_context.Users, "Id", "Id", order.ClientsId);
-            ViewData["FoodId"] = new SelectList(_context.Foods, "Id", "Id", order.FoodId);
+            //ViewData["ClientsId"] = new SelectList(_context.Users, "Id", "Id", order.ClientsId);
+            ViewData["FoodId"] = new SelectList(_context.Foods, "Id", "Name", order.FoodId);
             return View(order);
         }
 

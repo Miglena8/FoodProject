@@ -4,37 +4,38 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Най-вкусните ястия - само при нас!</h1>
+@if(User.IsInRole("Admin")){
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Снимка
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Weight)
+                Ястие
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DietFood)
+                Тегло
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FoodCategories)
+                Диетично?
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Ingredients)
+                Категория
+            </th>
+     
+       
+            <th>
+                Цена
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Image)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateUpdate)
+                Дата на промяна
             </th>
             <th></th>
         </tr>
@@ -42,35 +43,38 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+                <td>
+                       <a asp-action="Details" asp-route-id="@item.Id"><img src="@Html.DisplayFor(modelItem => item.Image)" width="140" /></a>
+                </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Weight)
+                @Html.DisplayFor(modelItem => item.Weight) грама
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DietFood)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FoodCategories.Id)
+                @Html.DisplayFor(modelItem => item.FoodCategories.Name)
             </td>
+         
+       
             <td>
-                @Html.DisplayFor(modelItem => item.Ingredients)
-            </td>
-            <td>
-					<img src="@Html.DisplayFor(modelItem => item.Image)" width="80"/>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
+                @Html.DisplayFor(modelItem => item.Price) лева
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DateUpdate)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                }
+      
         </tr>
 }
     </tbody>

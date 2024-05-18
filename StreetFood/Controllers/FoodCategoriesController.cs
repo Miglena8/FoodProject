@@ -60,7 +60,7 @@ namespace StreetFood.Controllers
             {
                 return View(foodCategory);
             }
-            _context.Add(foodCategory);
+            _context.FoodsCategories.Add(foodCategory);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
             
@@ -98,7 +98,8 @@ namespace StreetFood.Controllers
             {
                 try
                 {
-                    _context.Update(foodCategory);
+                    foodCategory.DateUpdate = DateTime.Now;
+                    _context.FoodsCategories.Update(foodCategory);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -109,7 +110,7 @@ namespace StreetFood.Controllers
                     }
                     else
                     {
-                        foodCategory.DateUpdate = DateTime.Now;
+                      
                         throw;
                     }
                 }

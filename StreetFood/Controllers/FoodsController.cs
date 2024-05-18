@@ -61,7 +61,7 @@ namespace StreetFood.Controllers
             food.DateUpdate = DateTime.Now;
             if (ModelState.IsValid)
             {
-                _context.Add(food);
+                _context.Foods.Add(food);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -102,7 +102,8 @@ namespace StreetFood.Controllers
             {
                 try
                 {
-                    _context.Update(food);
+                    food.DateUpdate = DateTime.Now;
+                    _context.Foods.Update(food);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -113,7 +114,7 @@ namespace StreetFood.Controllers
                     }
                     else
                     {
-                        food.DateUpdate = DateTime.Now;
+                        
                         throw;
                     }
                 }

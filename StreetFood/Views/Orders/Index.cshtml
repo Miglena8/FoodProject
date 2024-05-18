@@ -4,25 +4,26 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Направени поръчки</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-primary" asp-action="Create">Поръчай си от тук</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Clients)
+                Поръчана храна
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Foods)
+                Клиент
+            </th>
+      
+            <th>
+                Количество
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Quantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateUpdate)
+                Дата на промяна
             </th>
             <th></th>
         </tr>
@@ -30,14 +31,15 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id"> <img src="@Html.DisplayFor(modelItem => item.Foods.Image)" width="140" /></a>
+                </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Clients.Id)
+                @item.Clients.FirstName @item.Clients.LastName
             </td>
+            
             <td>
-                @Html.DisplayFor(modelItem => item.Foods.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
+                @Html.DisplayFor(modelItem => item.Quantity) броя
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DateUpdate)
